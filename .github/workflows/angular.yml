@@ -33,7 +33,7 @@ jobs:
           zip -r angular-dist.zip dist/
           
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: angular-dist
           path: angular-dist.zip
