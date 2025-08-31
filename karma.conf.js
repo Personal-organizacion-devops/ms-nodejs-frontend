@@ -1,17 +1,15 @@
-process.env.CHROME_BIN = require('puppeteer').executablePath();
-
 module.exports = function(config) {
   config.set({
-    browsers: ['ChromeHeadlessNoSandbox'],
-    customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-gpu']
-      }
-    },
+    browsers: ['ChromeHeadless'],
+    singleRun: true,
     frameworks: ['jasmine'],
-    files: ['src/**/*.spec.ts'],
+    files: [
+      'src/**/*.spec.ts'
+    ],
+    preprocessors: {
+      'src/**/*.spec.ts': ['typescript']
+    },
     reporters: ['progress'],
-    singleRun: true
+    browserNoActivityTimeout: 60000
   });
 };
