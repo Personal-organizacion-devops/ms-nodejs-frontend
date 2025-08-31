@@ -1,0 +1,57 @@
+name: Angular CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: Build and Test Angular
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build Angular project
+        run: npm run build
+
+      - name: Archive build artifacts
+        run: |
+          zip -r angular-dist.zip dist/
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: angular-dist
+          path: angular-dist.zip
+
+  cd-azure-sim:
+    name: Simulate Deploy to Azure
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: angular-dist
+          path: ./deploy
+
+      - name: List deploy folder
+        run: ls -la ./deploy
+
+      - name: Simulate Azure upload
+        run: echo "Simulating upload to Azure... (reference only)"
